@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia & Truth Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Trivia & Truth Game</h1>
+        <div id="question-container">
+            <p id="question-text"></p>
+            <div id="answers-container">
+                <!-- Answer buttons will be added dynamically -->
+            </div>
+        </div>
+        <div id="challenge-container">
+            <p id="challenge-text"></p>
+            <button id="next-round-btn" onclick="nextRound()">Next Round</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game-container {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    text-align: center;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+// Questions array with options and correct answer
+const questions = [
+    {
+        question: "What's my favorite movie?",
+        options: ["Inception", "Titanic", "Avengers", "The Dark Knight"],
+        answer: "Inception"
+    },
+    {
+        question: "What's my favorite color?",
+        options: ["Red", "Blue", "Green", "Purple"],
+        answer: "Blue"
+    },
+    {
+        question: "What country would I love to visit?",
+        options: ["Japan", "Italy", "Australia", "Brazil"],
+        answer: "Japan"
+    },
+    {
+        question: "What's my favorite food?",
+        options: ["Pizza", "Sushi", "Tacos", "Pasta"],
+        answer: "Sushi"
+    }
+];
+
+let currentQuestionIndex = 0;
+
+function loadQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    document.getElementById("question-text").innerText = currentQuestion.question;
+
+    const answersContainer = document.getElementById("answers-container");
+    answersContainer.innerHTML = ""; // Clear previous answers
+
+    currentQuestion.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(option);
+        answersContainer.appendChild(btn);
+    });
+}
+
+function checkAnswer(answer) {
+    const currentQuestion = questions[currentQuestionIndex];
+
+    if (answer === currentQuestion.answer) {
+        alert("Correct!");
+        // Proceed to next round
+        nextRound();
+    } else {
+        alert("Oops! Incorrect. Time for a challenge!");
+        document.getElementById("challenge-text").innerText = `You got it wrong! Choose a fun challenge!`;
+        document.getElementById("next-round-btn").style.display = "inline-block";
+    }
+}
+
+function nextRound() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+        loadQuestion();
+        document.getElementById("challenge-text").innerText = "";
+        document.getElementById("next-round-btn").style.display = "none";
+    } else {
+        alert("Game Over! Thanks for playing!");
+    }
+}
+
+// Start the game
+loadQuestion();
